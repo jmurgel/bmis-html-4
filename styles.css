@@ -56,6 +56,18 @@ footer {
     font-size: 14px;
     color: #f5dde0;
     margin-top: 40px;
+
+a{
+   color: #f5dde0;
+}
+a:hover { 
+   color: #ffd54f;
+   text-decoration: underline;
+}
+
+nav img {
+   border-radius: 12px;
+}
 h1 { 
    text-align: center;
    letter-spacing: 2px;
