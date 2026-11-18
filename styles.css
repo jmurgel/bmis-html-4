@@ -57,3 +57,11 @@ footer {
     color: #f5dde0;
     margin-top: 40px;
 }
+a {
+   Color:f5ddeo;
+}
+
+a:hover {
+   color: #ffd54f;
+   text-decoration: underline;
+}
