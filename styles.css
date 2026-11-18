@@ -56,7 +56,13 @@ footer {
     font-size: 14px;
     color: #f5dde0;
     margin-top: 40px;
+h1 { 
+   text-align: center;
+   letter-spacing: 2px;
+   font-size: 3em;
 }
-nav img {
-   border-radius: 12px;
+p{ 
+   line-height: 1.6;
+   margin-bottom: 20px;
 }
+   
