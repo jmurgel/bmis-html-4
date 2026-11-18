@@ -39,7 +39,173 @@
      This box is empty on purpose. In Part 7 you paste an interactive
      graphic BETWEEN the opening <div> and the closing </div> below.
      ===================================================================== -->
-<div class="showcase"></div>
+<div class="showcase">
+  <!-- HTML: the four slides (image + caption), the arrow buttons, and an empty spot where the dots are added -->
+<div class="sc-slides">
+  <div class="sc-slide sc-active">
+    <img src="97e12a08-7e67-4a03-97e7-a006e7bb3694.jpeg" alt="Sevilla, Spain">
+    <div class="sc-caption"><span class="sc-count">01 / 04</span><span class="sc-title">Sevilla</span></div>
+  </div>
+  <div class="sc-slide">
+    <img src="IMG_9139.jpeg" alt="Salamanca, Spain">
+    <div class="sc-caption"><span class="sc-count">02 / 04</span><span class="sc-title">Salamanca</span></div>
+  </div>
+  <div class="sc-slide">
+    <img src="IMG_9493.jpeg" alt="Cádiz, Spain">
+    <div class="sc-caption"><span class="sc-count">03 / 04</span><span class="sc-title">Cádiz</span></div>
+  </div>
+  <div class="sc-slide">
+    <img src="IMG_9824.jpeg" alt="Madrid, Spain">
+    <div class="sc-caption"><span class="sc-count">04 / 04</span><span class="sc-title">Madrid</span></div>
+  </div>
+</div>
+<button class="sc-btn sc-prev" type="button" aria-label="Previous place">&#8249;</button>
+<button class="sc-btn sc-next" type="button" aria-label="Next place">&#8250;</button>
+<div class="sc-dots"></div>
+
+<!-- CSS: brand colors and font, the fading slides, captions, buttons and dots. Every rule starts with .showcase -->
+<style>
+.showcase {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  height: clamp(240px, 62vw, 420px);
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f5dde0;
+  border: 3px solid #d0637c;
+  font-family: 'Bernard MT Condensed', Impact, 'Arial Narrow', sans-serif;
+}
+.showcase .sc-slides { position: absolute; inset: 0; }
+.showcase .sc-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.showcase .sc-slide.sc-active { opacity: 1; }
+.showcase .sc-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #f5dde0;
+}
+.showcase .sc-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 36px 18px 34px;
+  background: linear-gradient(to top, rgba(208, 99, 124, 0.92), rgba(208, 99, 124, 0));
+  color: #f5dde0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.showcase .sc-count { font-size: 14px; letter-spacing: 2px; opacity: 0.9; }
+.showcase .sc-title {
+  font-size: clamp(28px, 7vw, 46px);
+  letter-spacing: 1px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.showcase .sc-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: #f5dde0;
+  color: #d0637c;
+  font-family: inherit;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s, color 0.2s;
+}
+.showcase .sc-btn:hover,
+.showcase .sc-btn:focus-visible { background: #d0637c; color: #f5dde0; outline: 2px solid #f5dde0; }
+.showcase .sc-prev { left: 10px; }
+.showcase .sc-next { right: 10px; }
+.showcase .sc-dots {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+.showcase .sc-dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 2px solid #f5dde0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.showcase .sc-dot.sc-active { background: #f5dde0; }
+@media (max-width: 480px) {
+  .showcase .sc-btn { width: 36px; height: 36px; font-size: 26px; }
+  .showcase .sc-caption { padding: 30px 14px 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase .sc-slide { transition: none; }
+}
+</style>
+
+<!-- JavaScript: auto-cycles every 4 seconds, handles arrows, dots and swiping, and pauses while you hover -->
+<script>
+(function () {
+  var root = document.querySelector('.showcase');
+  if (!root) return;
+  var slides = root.querySelectorAll('.sc-slide');
+  var dotsBox = root.querySelector('.sc-dots');
+  var current = 0, timer = null, startX = 0;
+
+  var dots = [];
+  for (var i = 0; i < slides.length; i++) {
+    (function (n) {
+      var d = document.createElement('button');
+      d.type = 'button';
+      d.className = 'sc-dot' + (n === 0 ? ' sc-active' : '');
+      d.setAttribute('aria-label', 'Show place ' + (n + 1));
+      d.addEventListener('click', function () { show(n); restart(); });
+      dotsBox.appendChild(d);
+      dots.push(d);
+    })(i);
+  }
+
+  function show(n) {
+    slides[current].classList.remove('sc-active');
+    dots[current].classList.remove('sc-active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('sc-active');
+    dots[current].classList.add('sc-active');
+  }
+  function start() { timer = setInterval(function () { show(current + 1); }, 4000); }
+  function stop() { clearInterval(timer); }
+  function restart() { stop(); start(); }
+
+  root.querySelector('.sc-prev').addEventListener('click', function () { show(current - 1); restart(); });
+  root.querySelector('.sc-next').addEventListener('click', function () { show(current + 1); restart(); });
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; stop(); }, { passive: true });
+  root.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) show(current + (dx < 0 ? 1 : -1));
+    start();
+  }, { passive: true });
+
+  start();
+})();
+</script>
+</div>
 
 <!-- Footer: fill in your name -->
 <footer>Built by Jordan Murgel &middot; BMIS 235</footer>
