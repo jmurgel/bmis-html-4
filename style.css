@@ -1,14 +1,14 @@
 /* One stylesheet shared by every page */
 :root {
-  --bg: #f7f5f0;
+  --bg: #fff0f6;
   --card: #ffffff;
-  --ink: #1f2933;
-  --muted: #5f6b76;
-  --accent: #1f6f5c;
-  --asset: #2f6fb3;
-  --liab: #b3472f;
-  --equity: #7a4fb3;
-  --line: #ddd8cc;
+  --ink: #3a1f2d;
+  --muted: #85566c;
+  --accent: #d63384;
+  --asset: #c2185b;
+  --liab: #e0662f;
+  --equity: #8e44ad;
+  --line: #f5c6dc;
   --good: #1f8a4c;
   --bad: #c0392b;
 }
@@ -17,16 +17,16 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Quicksand", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--ink);
   line-height: 1.55;
 }
 
 header {
-  background: var(--accent);
+  background: linear-gradient(135deg, #ff6fae, #d63384);
   color: #fff;
-  padding: 16px;
+  padding: 20px 16px;
 }
 header h1 { margin: 0; font-size: 1.4rem; }
 header p { margin: 4px 0 0; opacity: .85; }
@@ -35,10 +35,11 @@ nav {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  background: #174f42;
+  background: #b0256c;
   padding: 8px 16px;
 }
 nav a {
+  font-weight: 600;
   color: #fff;
   text-decoration: none;
   padding: 6px 12px;
@@ -53,8 +54,9 @@ h2 { margin-top: 32px; }
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 20px;
+  box-shadow: 0 4px 14px rgba(214, 51, 132, .08);
   margin: 16px 0;
 }
 
@@ -71,12 +73,13 @@ button {
   background: var(--accent);
   color: #fff;
   border: 0;
-  border-radius: 6px;
-  padding: 8px 14px;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
   cursor: pointer;
   margin: 4px 4px 4px 0;
 }
-button.secondary { background: #e6e1d6; color: var(--ink); }
+button.secondary { background: #fbd3e6; color: var(--ink); }
 button:disabled { opacity: .5; cursor: default; }
 
 input, select, textarea {
@@ -127,10 +130,10 @@ textarea { min-height: 180px; }
 .t .cols > div { padding: 4px 6px; font-size: .9rem; }
 .t .cols > div:first-child { border-right: 2px solid var(--ink); }
 .t .flash { animation: flash 1s ease; }
-@keyframes flash { from { background: #fff3a8; } to { background: transparent; } }
+@keyframes flash { from { background: #ffc2dd; } to { background: transparent; } }
 
 /* Quiz */
-.choices button { display: block; width: 100%; text-align: left; background: #eef3f1; color: var(--ink); }
+.choices button { display: block; width: 100%; text-align: left; background: #ffe3f0; color: var(--ink); border-radius: 12px; }
 .choices button.right { background: var(--good); color: #fff; }
 .choices button.wrong { background: var(--bad); color: #fff; }
 .feedback { margin-top: 8px; font-weight: 600; }
@@ -140,7 +143,7 @@ table { width: 100%; border-collapse: collapse; }
 th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
 td.num, th.num { text-align: right; }
 tr.planted td { cursor: pointer; }
-tr.planted td:hover { background: #fff6d6; }
+tr.planted td:hover { background: #ffe3f0; }
 
 .hint { color: var(--muted); font-size: .9rem; }
 

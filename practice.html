@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ledger Lab · Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Practice</h1>
-    <p>Three ways to test yourself. Every answer explains why.</p>
+    <p>Three ways to test yourself, boss. Every answer explains why. 💅</p>
   </header>
   <nav>
     <a href="index.html">Home</a>
@@ -55,7 +57,7 @@
     </div>
   </main>
 
-  <footer>BMIS 235 · Ledger Lab</footer>
+  <footer>BMIS 235 · Ledger Lab 💖 Made for future boss girls</footer>
 
   <script>
     /* ---------- 1. Quiz ---------- */
@@ -63,7 +65,7 @@
       { q: "Which is the basic accounting equation?",
         a: ["Assets = Liabilities + Equity", "Assets + Liabilities = Equity", "Revenue − Expenses = Assets", "Equity = Assets + Liabilities"],
         correct: 0, why: "What you own (assets) was funded by creditors (liabilities) or owners (equity)." },
-      { q: "A business buys $500 of supplies with cash. What happens to total assets?",
+      { q: "Your boutique buys $500 of shopping bags and tissue paper with cash. What happens to total assets?",
         a: ["Increase $500", "Decrease $500", "No change", "Increase $1,000"],
         correct: 2, why: "Supplies go up $500 and cash goes down $500. It's an asset swap, so the total is unchanged." },
       { q: "Which of these is a liability?",
@@ -78,7 +80,7 @@
       { q: "Net income equals…",
         a: ["Assets − Liabilities", "Revenue − Expenses", "Cash in − Cash out", "Revenue + Equity"],
         correct: 1, why: "Net income is revenue minus expenses for the period." },
-      { q: "A customer pays you $200 in advance for work next month. You record…",
+      { q: "A client pays your nail studio $200 in advance for a bridal party next month. You record…",
         a: ["Revenue", "Unearned revenue (a liability)", "Accounts receivable", "An expense"],
         correct: 1, why: "You haven't earned it yet. You owe the work, so it's a liability until you do it." },
       { q: "In every journal entry, total debits must…",
@@ -104,7 +106,7 @@
           if (right) qScore++;
           b.className = right ? "right" : "wrong";
           box.children[item.correct].className = "right";
-          document.getElementById("quizFeedback").textContent = (right ? "Correct! " : "Not quite. ") + item.why;
+          document.getElementById("quizFeedback").textContent = (right ? "Yes, queen! 👑 " : "So close! ") + item.why;
           document.getElementById("quizScore").textContent = `Score: ${qScore}/${qDone}`;
         };
         box.appendChild(b);
@@ -191,7 +193,7 @@
             solved = true;
             tr.style.background = "#d8f3e3";
             fb.style.color = "var(--good)";
-            fb.textContent = "Found it! " + e.bug;
+            fb.textContent = "You found it, detective! 🔎 " + e.bug;
           } else {
             tr.style.background = "#fbe0dc";
             fb.style.color = "var(--bad)";

@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ledger Lab · See</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>See it: the equation in motion</h1>
-    <p>Click a transaction. Watch both sides move, and see why they always stay equal.</p>
+    <p>You're launching <strong>Bella's Bakery</strong> 🧁. Click each transaction and watch both sides of the equation stay perfectly balanced.</p>
   </header>
   <nav>
     <a href="index.html">Home</a>
@@ -36,7 +38,7 @@
           <div class="bar liab" id="barLiab"></div>
         </div>
       </div>
-      <p class="status" id="status">Start a business by clicking the first transaction.</p>
+      <p class="status" id="status">Open your bakery by clicking the first transaction.</p>
     </div>
 
     <div class="card">
@@ -48,12 +50,12 @@
 
     <div class="card">
       <h3>T-accounts</h3>
-      <p class="hint">Left side = debit, right side = credit. New entries flash yellow.</p>
+      <p class="hint">Left side = debit, right side = credit. New entries flash pink.</p>
       <div class="taccounts" id="taccounts"></div>
     </div>
   </main>
 
-  <footer>BMIS 235 · Ledger Lab</footer>
+  <footer>BMIS 235 · Ledger Lab 💖 Made for future boss girls</footer>
 
   <script>
     // Each account: which side of the equation it belongs to.
@@ -70,19 +72,19 @@
 
     // Each transaction: a debit and a credit for the same amount.
     const transactions = [
-      { label: "1. Owner invests $5,000 cash", dr: "Cash", cr: "Owner's Capital", amt: 5000,
+      { label: "1. Bella invests $5,000 of her savings", dr: "Cash", cr: "Owner's Capital", amt: 5000,
         why: "Cash (an asset) goes up. The owner's claim (equity) goes up by the same amount." },
-      { label: "2. Borrow $3,000 from the bank", dr: "Cash", cr: "Loan Payable", amt: 3000,
+      { label: "2. Bella borrows $3,000 from the bank", dr: "Cash", cr: "Loan Payable", amt: 3000,
         why: "Cash goes up, and so does what you owe (a liability)." },
-      { label: "3. Buy $2,000 of equipment with cash", dr: "Equipment", cr: "Cash", amt: 2000,
+      { label: "3. Buy a $2,000 pink stand mixer and oven", dr: "Equipment", cr: "Cash", amt: 2000,
         why: "One asset is swapped for another. Total assets don't change, so the bars stay put." },
-      { label: "4. Do $1,500 of work on credit", dr: "Accounts Receivable", cr: "Revenue", amt: 1500,
-        why: "The customer now owes you (asset up). Revenue increases equity." },
-      { label: "5. Pay $800 of expenses", dr: "Expenses", cr: "Cash", amt: 800,
+      { label: "4. Bake a $1,500 wedding cake, paid later", dr: "Accounts Receivable", cr: "Revenue", amt: 1500,
+        why: "The bride now owes you (asset up). Revenue increases equity." },
+      { label: "5. Pay $800 for flour, sprinkles and rent", dr: "Expenses", cr: "Cash", amt: 800,
         why: "Cash goes down. Expenses reduce equity, so both sides fall by $800." },
-      { label: "6. Customer pays $1,500 they owed", dr: "Cash", cr: "Accounts Receivable", amt: 1500,
+      { label: "6. The bride pays her $1,500", dr: "Cash", cr: "Accounts Receivable", amt: 1500,
         why: "Asset swap: receivable becomes cash. No change to totals." },
-      { label: "7. Repay $1,000 of the loan", dr: "Loan Payable", cr: "Cash", amt: 1000,
+      { label: "7. Bella repays $1,000 of her loan", dr: "Loan Payable", cr: "Cash", amt: 1000,
         why: "Cash goes down and the liability goes down. Both sides shrink." }
     ];
 
@@ -93,7 +95,7 @@
       for (const name in accounts) ledger[name] = { dr: [], cr: [] };
       nextTx = 0;
       document.getElementById("explain").textContent = "Each transaction shows its journal entry here.";
-      document.getElementById("status").textContent = "Start a business by clicking the first transaction.";
+      document.getElementById("status").textContent = "Open your bakery by clicking the first transaction.";
       renderButtons();
       render();
     }
