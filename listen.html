@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledger Lab · Listen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Listen: build a NotebookLM prompt</h1>
+    <p>Type a concept, copy the prompt, and paste it into NotebookLM's Audio Overview "customize" box.</p>
+  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="see.html">See</a>
+    <a href="practice.html">Practice</a>
+    <a href="story.html">Story</a>
+    <a href="listen.html" class="active">Listen</a>
+  </nav>
+
+  <main>
+    <div class="card">
+      <label for="concept"><strong>Concept</strong></label>
+      <input id="concept" list="ideas" placeholder="e.g. debits and credits">
+      <datalist id="ideas">
+        <option value="the accounting equation">
+        <option value="debits and credits">
+        <option value="the balance sheet vs. the income statement">
+        <option value="accrual vs. cash accounting">
+        <option value="unearned revenue">
+        <option value="the trial balance">
+      </datalist>
+
+      <p><label for="level"><strong>My level</strong></label>
+      <select id="level">
+        <option>complete beginner</option>
+        <option>I've taken one accounting class</option>
+        <option>reviewing for an exam</option>
+      </select></p>
+
+      <p><label for="length"><strong>Length</strong></label>
+      <select id="length">
+        <option>about 5 minutes</option>
+        <option>about 10 minutes</option>
+      </select></p>
+
+      <button id="make">Make my prompt</button>
+    </div>
+
+    <div class="card">
+      <textarea id="out" readonly placeholder="Your prompt will appear here."></textarea>
+      <button id="copy">Copy</button>
+      <span class="hint" id="copied"></span>
+      <p class="hint">Tip: in NotebookLM, add a source first (your textbook chapter or this site's home page), then choose
+      Audio Overview → Customize and paste this in.</p>
+    </div>
+  </main>
+
+  <footer>BMIS 235 · Ledger Lab</footer>
+
+  <script>
+    document.getElementById("make").onclick = () => {
+      const c = document.getElementById("concept").value.trim() || "the accounting equation";
+      const level = document.getElementById("level").value;
+      const len = document.getElementById("length").value;
+      document.getElementById("out").value =
+`Create an audio explainer, ${len} long, that teaches "${c}" from introductory financial accounting to a listener who is a ${level}.
+
+- Open with why ${c} matters to a real small business owner.
+- Explain it in plain language first, then introduce the correct accounting terms.
+- Walk through one concrete example with real dollar amounts (a small business like a lemonade stand or coffee cart), saying the journal entry out loud: which account is debited, which is credited, and how Assets = Liabilities + Equity stays balanced.
+- Point out the most common mistake students make with ${c} and how to avoid it.
+- End with a 3-question spoken quiz, pausing before each answer.
+Keep the tone friendly and conversational, and avoid reading lists or tables aloud.`;
+      document.getElementById("copied").textContent = "";
+    };
+
+    document.getElementById("copy").onclick = async () => {
+      const out = document.getElementById("out");
+      try { await navigator.clipboard.writeText(out.value); }
+      catch { out.select(); document.execCommand("copy"); }
+      document.getElementById("copied").textContent = "Copied!";
+    };
+  </script>
+</body>
+</html>

@@ -1,15 +1,17 @@
-# BMIS 235 · HTML-3 · Links + CSS: Your Own Site
+# BMIS 235 · HTML-4 · Ledger Lab
 
-**Name:** YOUR NAME
-**GU username:** YOUR-GU-USERNAME
+**Name:** Jordan Murgel
+**GU username:** jmurgel
 
-My live page: https://YOUR-GITHUB-USERNAME.github.io/bmis235-html-3/
+A learning tool for the basics of financial accounting (Assets = Liabilities + Equity, debits and credits).
 
-Instructions: https://gu-27.github.io/html-module/html-3.html
+## Pages
 
-## What's in this folder
+- `index.html`: home page with key terms and the four ways to learn
+- `see.html`: **See.** Run transactions and watch the equation bars and T-accounts update
+- `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
+- `story.html`: **Story.** Maya's lemonade stand and her first week of bookkeeping
+- `listen.html`: **Listen.** Builds a NotebookLM prompt for an audio explainer
+- `style.css`: one stylesheet shared by every page
 
-- `index.html` — your home page (keep this name)
-- `page1.html`, `page2.html`, `page3.html` — rename these to your own page names
-- `styles.css` — your brand: one file that styles every page linked to it
-- `img/` — your menu images (replace these with the ones you make in Excel)
+Plain HTML, CSS and JavaScript with no build step.

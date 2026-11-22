@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledger Lab · Practice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Practice</h1>
+    <p>Three ways to test yourself. Every answer explains why.</p>
+  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="see.html">See</a>
+    <a href="practice.html" class="active">Practice</a>
+    <a href="story.html">Story</a>
+    <a href="listen.html">Listen</a>
+  </nav>
+
+  <main>
+    <!-- 1. Multiple-choice quiz -->
+    <h2>1 · Quick quiz</h2>
+    <div class="card">
+      <span class="score" id="quizScore"></span>
+      <p id="quizQ"></p>
+      <div class="choices" id="quizChoices"></div>
+      <p class="feedback" id="quizFeedback"></p>
+      <button id="quizNext">Next question</button>
+    </div>
+
+    <!-- 2. Debit or credit sorter -->
+    <h2>2 · Debit or credit?</h2>
+    <div class="card">
+      <span class="score" id="sortScore"></span>
+      <p>To <strong>increase</strong> this account, do you debit or credit it?</p>
+      <p class="formula" id="sortAccount"></p>
+      <button id="btnDebit">Debit</button>
+      <button id="btnCredit">Credit</button>
+      <p class="feedback" id="sortFeedback"></p>
+      <p class="hint">Stuck? Remember DEALER: Dividends, Expenses, Assets = debit. Liabilities, Equity, Revenue = credit.</p>
+    </div>
+
+    <!-- 3. Find the broken entry -->
+    <h2>3 · Find the broken entry</h2>
+    <div class="card">
+      <p>The trial balance doesn't balance. One journal entry has a mistake. Click the row you think is wrong.</p>
+      <table>
+        <thead><tr><th>#</th><th>Description</th><th>Debit</th><th>Credit</th><th class="num">Amount</th></tr></thead>
+        <tbody id="bugRows"></tbody>
+      </table>
+      <p class="feedback" id="bugFeedback"></p>
+      <button id="bugNext">New puzzle</button>
+    </div>
+  </main>
+
+  <footer>BMIS 235 · Ledger Lab</footer>
+
+  <script>
+    /* ---------- 1. Quiz ---------- */
+    const quiz = [
+      { q: "Which is the basic accounting equation?",
+        a: ["Assets = Liabilities + Equity", "Assets + Liabilities = Equity", "Revenue − Expenses = Assets", "Equity = Assets + Liabilities"],
+        correct: 0, why: "What you own (assets) was funded by creditors (liabilities) or owners (equity)." },
+      { q: "A business buys $500 of supplies with cash. What happens to total assets?",
+        a: ["Increase $500", "Decrease $500", "No change", "Increase $1,000"],
+        correct: 2, why: "Supplies go up $500 and cash goes down $500. It's an asset swap, so the total is unchanged." },
+      { q: "Which of these is a liability?",
+        a: ["Accounts Receivable", "Accounts Payable", "Inventory", "Revenue"],
+        correct: 1, why: "Payable = you owe it. Receivable = someone owes you, which makes it an asset." },
+      { q: "Revenue increases which part of the equation?",
+        a: ["Liabilities", "Equity", "Neither", "Only assets"],
+        correct: 1, why: "Revenue builds up retained earnings, which is part of equity." },
+      { q: "Which financial statement shows assets, liabilities and equity at one point in time?",
+        a: ["Income statement", "Balance sheet", "Statement of cash flows", "Trial balance"],
+        correct: 1, why: "The balance sheet is a snapshot on a single date. The income statement covers a period of time." },
+      { q: "Net income equals…",
+        a: ["Assets − Liabilities", "Revenue − Expenses", "Cash in − Cash out", "Revenue + Equity"],
+        correct: 1, why: "Net income is revenue minus expenses for the period." },
+      { q: "A customer pays you $200 in advance for work next month. You record…",
+        a: ["Revenue", "Unearned revenue (a liability)", "Accounts receivable", "An expense"],
+        correct: 1, why: "You haven't earned it yet. You owe the work, so it's a liability until you do it." },
+      { q: "In every journal entry, total debits must…",
+        a: ["Be larger than credits", "Equal total credits", "Equal zero", "Equal total assets"],
+        correct: 1, why: "Double-entry bookkeeping: debits = credits, always." }
+    ];
+    let qi = 0, qScore = 0, qDone = 0, answered = false;
+
+    function showQuestion() {
+      const item = quiz[qi];
+      answered = false;
+      document.getElementById("quizQ").innerHTML = `<strong>Q${qi + 1}.</strong> ${item.q}`;
+      document.getElementById("quizFeedback").textContent = "";
+      const box = document.getElementById("quizChoices");
+      box.innerHTML = "";
+      item.a.forEach((text, i) => {
+        const b = document.createElement("button");
+        b.textContent = text;
+        b.onclick = () => {
+          if (answered) return;
+          answered = true; qDone++;
+          const right = i === item.correct;
+          if (right) qScore++;
+          b.className = right ? "right" : "wrong";
+          box.children[item.correct].className = "right";
+          document.getElementById("quizFeedback").textContent = (right ? "Correct! " : "Not quite. ") + item.why;
+          document.getElementById("quizScore").textContent = `Score: ${qScore}/${qDone}`;
+        };
+        box.appendChild(b);
+      });
+    }
+    document.getElementById("quizNext").onclick = () => { qi = (qi + 1) % quiz.length; showQuestion(); };
+    showQuestion();
+
+    /* ---------- 2. Debit / credit sorter ---------- */
+    const sortItems = [
+      ["Cash", "debit", "Cash is an asset. Assets increase with a debit."],
+      ["Accounts Payable", "credit", "A liability. Liabilities increase with a credit."],
+      ["Rent Expense", "debit", "Expenses increase with a debit."],
+      ["Service Revenue", "credit", "Revenue increases with a credit."],
+      ["Equipment", "debit", "An asset, so a debit increases it."],
+      ["Owner's Capital", "credit", "Equity increases with a credit."],
+      ["Notes Payable", "credit", "A liability, so a credit increases it."],
+      ["Dividends", "debit", "Dividends (owner withdrawals) increase with a debit. They're the D in DEALER."],
+      ["Accounts Receivable", "debit", "An asset: money customers owe you."],
+      ["Unearned Revenue", "credit", "A liability. You owe the customer the work."],
+      ["Salaries Expense", "debit", "Expenses increase with a debit."],
+      ["Inventory", "debit", "An asset, so a debit increases it."]
+    ];
+    let current, sScore = 0, sDone = 0, sAnswered = false;
+    function nextSort() {
+      current = sortItems[Math.floor(Math.random() * sortItems.length)];
+      sAnswered = false;
+      document.getElementById("sortAccount").textContent = current[0];
+      document.getElementById("sortFeedback").textContent = "";
+    }
+    function answerSort(choice) {
+      if (sAnswered) { nextSort(); return; }
+      sAnswered = true; sDone++;
+      const right = choice === current[1];
+      if (right) sScore++;
+      const fb = document.getElementById("sortFeedback");
+      fb.style.color = right ? "var(--good)" : "var(--bad)";
+      fb.textContent = (right ? "✔ " : "✘ ") + current[2] + " Click either button for the next one.";
+      document.getElementById("sortScore").textContent = `Score: ${sScore}/${sDone}`;
+    }
+    document.getElementById("btnDebit").onclick = () => answerSort("debit");
+    document.getElementById("btnCredit").onclick = () => answerSort("credit");
+    nextSort();
+
+    /* ---------- 3. Find the broken entry ---------- */
+    // Each puzzle: a list of entries; one has `bug` explaining the mistake.
+    const puzzles = [
+      [
+        { d: "Owner invests cash", dr: "Cash", cr: "Owner's Capital", amt: 4000 },
+        { d: "Pay rent", dr: "Cash", cr: "Rent Expense", amt: 700,
+          bug: "Debit and credit are swapped. Paying rent should be Dr Rent Expense / Cr Cash." },
+        { d: "Buy supplies on account", dr: "Supplies", cr: "Accounts Payable", amt: 250 },
+        { d: "Earn revenue in cash", dr: "Cash", cr: "Service Revenue", amt: 1200 }
+      ],
+      [
+        { d: "Borrow from bank", dr: "Cash", cr: "Notes Payable", amt: 5000 },
+        { d: "Buy equipment with cash", dr: "Equipment", cr: "Cash", amt: 2200 },
+        { d: "Bill a customer", dr: "Service Revenue", cr: "Accounts Receivable", amt: 900,
+          bug: "Reversed. Billing a customer is Dr Accounts Receivable / Cr Service Revenue." },
+        { d: "Pay salaries", dr: "Salaries Expense", cr: "Cash", amt: 600 }
+      ],
+      [
+        { d: "Collect payment in advance", dr: "Cash", cr: "Service Revenue", amt: 300,
+          bug: "The work isn't done yet, so it's not revenue. Credit Unearned Revenue (a liability) instead." },
+        { d: "Pay utilities", dr: "Utilities Expense", cr: "Cash", amt: 150 },
+        { d: "Pay a supplier you owed", dr: "Accounts Payable", cr: "Cash", amt: 250 },
+        { d: "Owner withdraws cash", dr: "Dividends", cr: "Cash", amt: 400 }
+      ]
+    ];
+    let pi = 0, solved = false;
+    function showPuzzle() {
+      solved = false;
+      document.getElementById("bugFeedback").textContent = "";
+      const body = document.getElementById("bugRows");
+      body.innerHTML = "";
+      puzzles[pi].forEach((e, i) => {
+        const tr = document.createElement("tr");
+        tr.className = "planted";
+        tr.innerHTML = `<td>${i + 1}</td><td>${e.d}</td><td>${e.dr}</td><td>${e.cr}</td><td class="num">$${e.amt.toLocaleString()}</td>`;
+        tr.onclick = () => {
+          if (solved) return;
+          const fb = document.getElementById("bugFeedback");
+          if (e.bug) {
+            solved = true;
+            tr.style.background = "#d8f3e3";
+            fb.style.color = "var(--good)";
+            fb.textContent = "Found it! " + e.bug;
+          } else {
+            tr.style.background = "#fbe0dc";
+            fb.style.color = "var(--bad)";
+            fb.textContent = `Entry ${i + 1} is correct: Dr ${e.dr} / Cr ${e.cr}. Keep looking.`;
+          }
+        };
+        body.appendChild(tr);
+      });
+    }
+    document.getElementById("bugNext").onclick = () => { pi = (pi + 1) % puzzles.length; showPuzzle(); };
+    showPuzzle();
+  </script>
+</body>
+</html>

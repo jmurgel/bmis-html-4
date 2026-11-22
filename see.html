@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledger Lab · See</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>See it: the equation in motion</h1>
+    <p>Click a transaction. Watch both sides move, and see why they always stay equal.</p>
+  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="see.html" class="active">See</a>
+    <a href="practice.html">Practice</a>
+    <a href="story.html">Story</a>
+    <a href="listen.html">Listen</a>
+  </nav>
+
+  <main>
+    <div class="card">
+      <p class="formula">
+        <span class="asset">Assets</span> =
+        <span class="liab">Liabilities</span> +
+        <span class="equity">Equity</span>
+      </p>
+      <div class="equation">
+        <div class="stack" id="leftStack">
+          <div class="bar asset" id="barAssets"></div>
+        </div>
+        <div class="equals">=</div>
+        <div class="stack" id="rightStack">
+          <div class="bar equity" id="barEquity"></div>
+          <div class="bar liab" id="barLiab"></div>
+        </div>
+      </div>
+      <p class="status" id="status">Start a business by clicking the first transaction.</p>
+    </div>
+
+    <div class="card">
+      <h3>Transactions</h3>
+      <div id="txButtons"></div>
+      <button class="secondary" id="reset">Reset</button>
+      <p id="explain" class="hint">Each transaction shows its journal entry here.</p>
+    </div>
+
+    <div class="card">
+      <h3>T-accounts</h3>
+      <p class="hint">Left side = debit, right side = credit. New entries flash yellow.</p>
+      <div class="taccounts" id="taccounts"></div>
+    </div>
+  </main>
+
+  <footer>BMIS 235 · Ledger Lab</footer>
+
+  <script>
+    // Each account: which side of the equation it belongs to.
+    // Equity-type accounts (Revenue, Expense) roll into Equity.
+    const accounts = {
+      "Cash":                { type: "asset" },
+      "Equipment":           { type: "asset" },
+      "Accounts Receivable": { type: "asset" },
+      "Loan Payable":        { type: "liab" },
+      "Owner's Capital":     { type: "equity" },
+      "Revenue":             { type: "equity" },
+      "Expenses":            { type: "equity" }
+    };
+
+    // Each transaction: a debit and a credit for the same amount.
+    const transactions = [
+      { label: "1. Owner invests $5,000 cash", dr: "Cash", cr: "Owner's Capital", amt: 5000,
+        why: "Cash (an asset) goes up. The owner's claim (equity) goes up by the same amount." },
+      { label: "2. Borrow $3,000 from the bank", dr: "Cash", cr: "Loan Payable", amt: 3000,
+        why: "Cash goes up, and so does what you owe (a liability)." },
+      { label: "3. Buy $2,000 of equipment with cash", dr: "Equipment", cr: "Cash", amt: 2000,
+        why: "One asset is swapped for another. Total assets don't change, so the bars stay put." },
+      { label: "4. Do $1,500 of work on credit", dr: "Accounts Receivable", cr: "Revenue", amt: 1500,
+        why: "The customer now owes you (asset up). Revenue increases equity." },
+      { label: "5. Pay $800 of expenses", dr: "Expenses", cr: "Cash", amt: 800,
+        why: "Cash goes down. Expenses reduce equity, so both sides fall by $800." },
+      { label: "6. Customer pays $1,500 they owed", dr: "Cash", cr: "Accounts Receivable", amt: 1500,
+        why: "Asset swap: receivable becomes cash. No change to totals." },
+      { label: "7. Repay $1,000 of the loan", dr: "Loan Payable", cr: "Cash", amt: 1000,
+        why: "Cash goes down and the liability goes down. Both sides shrink." }
+    ];
+
+    let ledger, nextTx;
+
+    function reset() {
+      ledger = {};
+      for (const name in accounts) ledger[name] = { dr: [], cr: [] };
+      nextTx = 0;
+      document.getElementById("explain").textContent = "Each transaction shows its journal entry here.";
+      document.getElementById("status").textContent = "Start a business by clicking the first transaction.";
+      renderButtons();
+      render();
+    }
+
+    // Balance of an account, as a positive number on its "normal" side.
+    function balance(name) {
+      const sum = a => a.reduce((s, x) => s + x.amt, 0);
+      const d = sum(ledger[name].dr), c = sum(ledger[name].cr);
+      // DEALER: Expenses and Assets are normal-debit; the rest are normal-credit.
+      return (accounts[name].type === "asset" || name === "Expenses") ? d - c : c - d;
+    }
+
+    function totals() {
+      let assets = 0, liab = 0, equity = 0;
+      for (const name in accounts) {
+        const b = balance(name);
+        if (accounts[name].type === "asset") assets += b;
+        else if (accounts[name].type === "liab") liab += b;
+        else if (name === "Expenses") equity -= b;  // expenses reduce equity
+        else equity += b;
+      }
+      return { assets, liab, equity };
+    }
+
+    const money = n => "$" + n.toLocaleString();
+
+    function render() {
+      const t = totals();
+      const max = 10000, px = 220;
+      const h = v => Math.max(0, v / max * px) + "px";
+      const setBar = (id, v, label) => {
+        const el = document.getElementById(id);
+        el.style.height = h(v);
+        el.textContent = v > 0 ? label + " " + money(v) : "";
+      };
+      setBar("barAssets", t.assets, "Assets");
+      setBar("barLiab", t.liab, "Liab.");
+      setBar("barEquity", t.equity, "Equity");
+
+      const box = document.getElementById("taccounts");
+      box.innerHTML = "";
+      for (const name in accounts) {
+        const div = document.createElement("div");
+        div.className = "t";
+        const lines = side => ledger[name][side]
+          .map(x => `<div class="${x.fresh ? "flash" : ""}">${money(x.amt)}</div>`).join("");
+        div.innerHTML = `<h4 class="${accounts[name].type}">${name}</h4>
+          <div class="cols"><div>${lines("dr")}</div><div>${lines("cr")}</div></div>
+          <div class="hint" style="text-align:center">Balance: ${money(balance(name))}</div>`;
+        box.appendChild(div);
+      }
+      for (const name in ledger) ["dr", "cr"].forEach(s => ledger[name][s].forEach(x => x.fresh = false));
+    }
+
+    function renderButtons() {
+      const box = document.getElementById("txButtons");
+      box.innerHTML = "";
+      transactions.forEach((tx, i) => {
+        const b = document.createElement("button");
+        b.textContent = tx.label;
+        b.disabled = i !== nextTx;
+        b.onclick = () => post(i);
+        box.appendChild(b);
+      });
+    }
+
+    function post(i) {
+      const tx = transactions[i];
+      ledger[tx.dr].dr.push({ amt: tx.amt, fresh: true });
+      ledger[tx.cr].cr.push({ amt: tx.amt, fresh: true });
+      nextTx++;
+      document.getElementById("explain").innerHTML =
+        `<strong>Dr</strong> ${tx.dr} ${money(tx.amt)} &nbsp;/&nbsp; <strong>Cr</strong> ${tx.cr} ${money(tx.amt)}<br>${tx.why}`;
+      const t = totals();
+      document.getElementById("status").textContent =
+        `${money(t.assets)} = ${money(t.liab)} + ${money(t.equity)}  ✔ Balanced`;
+      renderButtons();
+      render();
+    }
+
+    document.getElementById("reset").onclick = reset;
+    reset();
+  </script>
+</body>
+</html>
