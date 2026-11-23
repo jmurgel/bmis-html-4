@@ -193,11 +193,11 @@
           const fb = document.getElementById("bugFeedback");
           if (e.bug) {
             solved = true;
-            tr.style.background = "#ffc9e3";
+            tr.style.background = "#d8f3e3";
             fb.style.color = "var(--good)";
             fb.textContent = "You found it, detective! 🔎 " + e.bug;
           } else {
-            tr.style.background = "#f3d0df";
+            tr.style.background = "#fbe0dc";
             fb.style.color = "var(--bad)";
             fb.textContent = `Entry ${i + 1} is correct: Dr ${e.dr} / Cr ${e.cr}. Keep looking.`;
           }
