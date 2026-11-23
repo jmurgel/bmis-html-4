@@ -7,10 +7,11 @@ A learning tool for the basics of financial accounting (Assets = Liabilities + E
 
 ## Pages
 
-- `index.html`: home page with key terms and the four ways to learn
+- `index.html`: home page with key terms and the five ways to learn
 - `see.html`: **See.** Run transactions and watch the equation bars and T-accounts update
 - `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
-- `story.html`: **Story.** Maya's lemonade stand and her first week of bookkeeping
+- `statements.html`: **Statements.** Fill out an income statement and balance sheet for three practice businesses
+- `story.html`: **Story.** Maya & Zoe start a bracelet business and learn to keep their books
 - `listen.html`: **Listen.** Builds a NotebookLM prompt for an audio explainer
 - `style.css`: one stylesheet shared by every page
 
