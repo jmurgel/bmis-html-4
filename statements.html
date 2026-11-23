@@ -12,7 +12,7 @@
 <body>
   <header>
     <h1>Statements: build them yourself</h1>
-    <p>Use the account balances to fill out the income statement first, then the balance sheet. 📊</p>
+    <p>Use the account balances to fill out the income statement, the statement of retained earnings, then the balance sheet. 📊</p>
   </header>
   <nav>
     <a href="index.html">Home</a>
@@ -34,8 +34,8 @@
     <h2>Step 1 · The account balances</h2>
     <div class="card">
       <p class="hint">These are every account's ending balance, in no particular order. Decide where each one belongs.
-      Revenue and expenses go on the <strong>income statement</strong>. Assets, liabilities and common stock go on the
-      <strong>balance sheet</strong>.</p>
+      Revenue and expenses go on the <strong>income statement</strong>. Beginning retained earnings and dividends go on the
+      <strong>statement of retained earnings</strong>. Assets, liabilities and common stock go on the <strong>balance sheet</strong>.</p>
       <table>
         <thead><tr><th>Account</th><th class="num">Balance</th></tr></thead>
         <tbody id="balances"></tbody>
@@ -52,10 +52,22 @@
       <p class="feedback" id="isFeedback"></p>
     </div>
 
-    <div class="flow" id="flow">💖 Net income doesn't disappear. It flows into <strong>retained earnings</strong>, inside shareholders' equity on the balance sheet.</div>
+    <div class="flow">💖 Net income doesn't disappear. It flows into the <strong>statement of retained earnings</strong>.</div>
 
-    <!-- Step 3: balance sheet -->
-    <h2>Step 3 · Balance sheet</h2>
+    <!-- Step 3: statement of retained earnings -->
+    <h2>Step 3 · Statement of retained earnings</h2>
+    <div class="card">
+      <p class="stmt-title" id="reTitle"></p>
+      <table class="stmt"><tbody id="reBody"></tbody></table>
+      <button id="reCheck">Check my statement of retained earnings</button>
+      <button class="secondary" id="reShow">Show answers</button>
+      <p class="feedback" id="reFeedback"></p>
+    </div>
+
+    <div class="flow">💖 Ending retained earnings flows into <strong>shareholders' equity</strong> on the balance sheet.</div>
+
+    <!-- Step 4: balance sheet -->
+    <h2>Step 4 · Balance sheet</h2>
     <div class="card">
       <p class="stmt-title" id="bsTitle"></p>
       <table class="stmt"><tbody id="bsBody"></tbody></table>
@@ -69,8 +81,10 @@
       <ul>
         <li><strong>Income statement</strong> = a movie of one period. Revenue − Expenses = <strong>Net income</strong>.</li>
         <li><strong>Balance sheet</strong> = a snapshot of one day. Assets = Liabilities + Shareholders' Equity.</li>
-        <li><strong>Shareholders' equity</strong> = common stock + retained earnings. Retained earnings = net income − dividends (these businesses are brand new and paid no dividends yet).</li>
-        <li>Order matters: do the income statement first, because the balance sheet needs its net income.</li>
+        <li><strong>Statement of retained earnings</strong>: Beginning retained earnings + Net income − Dividends = <strong>Ending retained earnings</strong>.</li>
+        <li><strong>Shareholders' equity</strong> = common stock + ending retained earnings.</li>
+        <li>Dividends are <strong>not</strong> an expense, so they never go on the income statement.</li>
+        <li>Order matters: income statement → statement of retained earnings → balance sheet. Each one hands a number to the next.</li>
       </ul>
     </div>
   </main>
@@ -86,36 +100,42 @@
         owner: "Lily",
         period: "Month ended March 31",
         date: "March 31",
-        intro: "Lily pours soy candles and sells them online and at the farmers' market. Here's her first month.",
+        intro: "Lily pours soy candles and sells them online and at the farmers' market. Here's her first month. She paid herself and her investors a small dividend.",
         revenue:     [["Sales Revenue", 3800]],
         expenses:    [["Wages Expense", 900], ["Rent Expense", 600], ["Advertising Expense", 200], ["Utilities Expense", 100]],
-        assets:      [["Cash", 5000], ["Accounts Receivable", 600], ["Supplies (wax and wicks)", 900], ["Equipment", 2500]],
+        assets:      [["Cash", 4500], ["Accounts Receivable", 600], ["Supplies (wax and wicks)", 900], ["Equipment", 2500]],
         liabilities: [["Accounts Payable", 700], ["Unearned Revenue", 300], ["Notes Payable", 2000]],
-        commonStock: 4000
+        commonStock: 4000,
+        beginningRE: 0,
+        dividends: 500
       },
       {
         name: "Sofia's Nail Studio 💅",
         owner: "Sofia",
         period: "Month ended April 30",
         date: "April 30",
-        intro: "Sofia opened a nail studio downtown. Fill out her statements for April.",
+        intro: "Sofia's nail studio downtown is in its second year, so it already has some retained earnings. Fill out her statements for April.",
         revenue:     [["Service Revenue", 5200]],
         expenses:    [["Wages Expense", 1800], ["Salon Rent Expense", 1200], ["Supplies Expense", 700], ["Insurance Expense", 100]],
-        assets:      [["Cash", 3100], ["Accounts Receivable", 400], ["Supplies (polish and gels)", 500], ["Equipment", 4000]],
+        assets:      [["Cash", 3500], ["Accounts Receivable", 400], ["Supplies (polish and gels)", 500], ["Equipment", 4000]],
         liabilities: [["Accounts Payable", 600], ["Loan Payable", 2500]],
-        commonStock: 3500
+        commonStock: 3500,
+        beginningRE: 800,
+        dividends: 400
       },
       {
         name: "Ava's Boutique 👗",
         owner: "Ava",
         period: "Month ended May 31",
         date: "May 31",
-        intro: "Ava runs a small clothing boutique. This one has two kinds of revenue. Watch out!",
+        intro: "Ava runs a small clothing boutique. This one has two kinds of revenue and an existing retained earnings balance. Watch out!",
         revenue:     [["Sales Revenue", 7400], ["Styling Session Revenue", 600]],
         expenses:    [["Cost of Goods Sold", 3500], ["Wages Expense", 1500], ["Rent Expense", 1100], ["Advertising Expense", 400]],
-        assets:      [["Cash", 4300], ["Inventory", 6200], ["Equipment", 1800]],
+        assets:      [["Cash", 4800], ["Inventory", 6200], ["Equipment", 1800]],
         liabilities: [["Accounts Payable", 2100], ["Notes Payable", 3000]],
-        commonStock: 5700
+        commonStock: 5700,
+        beginningRE: 1200,
+        dividends: 700
       }
     ];
 
@@ -134,11 +154,13 @@
       biz = businesses[i];
       const b = biz;
       const totalRev = sum(b.revenue), totalExp = sum(b.expenses), ni = totalRev - totalExp;
-      const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.commonStock + ni;
+      const endRE = b.beginningRE + ni - b.dividends;
+      const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.commonStock + endRE;
       document.getElementById("intro").textContent = b.intro;
 
       // Step 1: every account, shuffled, with its balance shown
-      const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, ["Common Stock", b.commonStock]];
+      const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, ["Common Stock", b.commonStock],
+        ["Retained Earnings (start of the month)", b.beginningRE], ["Dividends", b.dividends]];
       all.sort(() => Math.random() - 0.5);
       document.getElementById("balances").innerHTML =
         all.map(a => `<tr><td>${a[0]}</td><td class="num">${money(a[1])}</td></tr>`).join("");
@@ -154,7 +176,15 @@
       is += row("total grand", "Net income", ni, "Revenues − Expenses.");
       document.getElementById("isBody").innerHTML = is;
 
-      // Step 3: balance sheet
+      // Step 3: statement of retained earnings
+      document.getElementById("reTitle").innerHTML = `<strong>${b.name}</strong><br>Statement of Retained Earnings<br>${b.period}`;
+      let re = row("line", "Retained earnings, beginning", b.beginningRE, "Use the start-of-the-month retained earnings balance above.");
+      re += row("line", "Add: Net income", ni, "Copy net income from your income statement.");
+      re += row("line", "Less: Dividends", b.dividends, "Find Dividends in the balances above. Enter it as a positive number.");
+      re += row("total grand", "Retained earnings, ending", endRE, "Beginning + Net income − Dividends.");
+      document.getElementById("reBody").innerHTML = re;
+
+      // Step 4: balance sheet
       document.getElementById("bsTitle").innerHTML = `<strong>${b.name}</strong><br>Balance Sheet<br>${b.date}`;
       let bs = row("head", "Assets");
       b.assets.forEach(a => bs += row("line", a[0], a[1], "Find it in the balances above."));
@@ -164,12 +194,12 @@
       bs += row("total", "Total liabilities", totalL, "Add up all the liabilities.");
       bs += row("head", "Shareholders' Equity");
       bs += row("line", "Common Stock", b.commonStock, "What shareholders invested. It's in the balances above.");
-      bs += row("line", "Retained Earnings", ni, "Net income − dividends. No dividends were paid, so copy net income from your income statement.");
+      bs += row("line", "Retained Earnings", endRE, "Copy ending retained earnings from your statement of retained earnings.");
       bs += row("total", "Total shareholders' equity", totalE, "Common stock + Retained earnings.");
       bs += row("total grand", "Total liabilities + shareholders' equity", totalL + totalE, "Total liabilities + Total shareholders' equity. Should match total assets!");
       document.getElementById("bsBody").innerHTML = bs;
 
-      ["isFeedback", "bsFeedback"].forEach(id => document.getElementById(id).textContent = "");
+      ["isFeedback", "reFeedback", "bsFeedback"].forEach(id => document.getElementById(id).textContent = "");
     }
 
     // Mark each input right or wrong and show a hint on the wrong ones.
@@ -206,7 +236,10 @@
     }
 
     document.getElementById("isCheck").onclick = () =>
-      check("isBody", "isFeedback", "Yes, queen! 👑 Your income statement is perfect. Now carry that net income down to the balance sheet.");
+      check("isBody", "isFeedback", "Yes, queen! 👑 Your income statement is perfect. Now carry that net income down to the statement of retained earnings.");
+    document.getElementById("reCheck").onclick = () =>
+      check("reBody", "reFeedback", "Yes, queen! 👑 Now carry ending retained earnings down to the balance sheet.");
+    document.getElementById("reShow").onclick = () => show("reBody", "reFeedback");
     document.getElementById("bsCheck").onclick = () =>
       check("bsBody", "bsFeedback", `It balances! 💖 Assets = Liabilities + Shareholders' Equity. ${biz.owner} would hire you as her accountant.`);
     document.getElementById("isShow").onclick = () => show("isBody", "isFeedback");
@@ -220,7 +253,7 @@
     // Sanity check while building: every business must balance.
     businesses.forEach(b => {
       const ni = sum(b.revenue) - sum(b.expenses);
-      if (sum(b.assets) !== sum(b.liabilities) + b.commonStock + ni) console.error(b.name + " does not balance");
+      if (sum(b.assets) !== sum(b.liabilities) + b.commonStock + b.beginningRE + ni - b.dividends) console.error(b.name + " does not balance");
     });
   </script>
 </body>
