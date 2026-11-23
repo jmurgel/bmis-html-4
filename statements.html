@@ -34,7 +34,7 @@
     <h2>Step 1 · The account balances</h2>
     <div class="card">
       <p class="hint">These are every account's ending balance, in no particular order. Decide where each one belongs.
-      Revenue and expenses go on the <strong>income statement</strong>. Assets, liabilities and capital go on the
+      Revenue and expenses go on the <strong>income statement</strong>. Assets, liabilities and common stock go on the
       <strong>balance sheet</strong>.</p>
       <table>
         <thead><tr><th>Account</th><th class="num">Balance</th></tr></thead>
@@ -52,7 +52,7 @@
       <p class="feedback" id="isFeedback"></p>
     </div>
 
-    <div class="flow" id="flow">💖 Net income doesn't disappear. It flows into the <strong>equity</strong> section of the balance sheet.</div>
+    <div class="flow" id="flow">💖 Net income doesn't disappear. It flows into <strong>retained earnings</strong>, inside shareholders' equity on the balance sheet.</div>
 
     <!-- Step 3: balance sheet -->
     <h2>Step 3 · Balance sheet</h2>
@@ -68,8 +68,8 @@
       <h3>Cheat sheet</h3>
       <ul>
         <li><strong>Income statement</strong> = a movie of one period. Revenue − Expenses = <strong>Net income</strong>.</li>
-        <li><strong>Balance sheet</strong> = a snapshot of one day. Assets = Liabilities + Equity.</li>
-        <li><strong>Equity</strong> on the balance sheet = owner's capital + net income (minus any withdrawals).</li>
+        <li><strong>Balance sheet</strong> = a snapshot of one day. Assets = Liabilities + Shareholders' Equity.</li>
+        <li><strong>Shareholders' equity</strong> = common stock + retained earnings. Retained earnings = net income − dividends (these businesses are brand new and paid no dividends yet).</li>
         <li>Order matters: do the income statement first, because the balance sheet needs its net income.</li>
       </ul>
     </div>
@@ -91,7 +91,7 @@
         expenses:    [["Wages Expense", 900], ["Rent Expense", 600], ["Advertising Expense", 200], ["Utilities Expense", 100]],
         assets:      [["Cash", 5000], ["Accounts Receivable", 600], ["Supplies (wax and wicks)", 900], ["Equipment", 2500]],
         liabilities: [["Accounts Payable", 700], ["Unearned Revenue", 300], ["Notes Payable", 2000]],
-        capital: 4000
+        commonStock: 4000
       },
       {
         name: "Sofia's Nail Studio 💅",
@@ -103,7 +103,7 @@
         expenses:    [["Wages Expense", 1800], ["Salon Rent Expense", 1200], ["Supplies Expense", 700], ["Insurance Expense", 100]],
         assets:      [["Cash", 3100], ["Accounts Receivable", 400], ["Supplies (polish and gels)", 500], ["Equipment", 4000]],
         liabilities: [["Accounts Payable", 600], ["Loan Payable", 2500]],
-        capital: 3500
+        commonStock: 3500
       },
       {
         name: "Ava's Boutique 👗",
@@ -115,7 +115,7 @@
         expenses:    [["Cost of Goods Sold", 3500], ["Wages Expense", 1500], ["Rent Expense", 1100], ["Advertising Expense", 400]],
         assets:      [["Cash", 4300], ["Inventory", 6200], ["Equipment", 1800]],
         liabilities: [["Accounts Payable", 2100], ["Notes Payable", 3000]],
-        capital: 5700
+        commonStock: 5700
       }
     ];
 
@@ -134,11 +134,11 @@
       biz = businesses[i];
       const b = biz;
       const totalRev = sum(b.revenue), totalExp = sum(b.expenses), ni = totalRev - totalExp;
-      const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.capital + ni;
+      const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.commonStock + ni;
       document.getElementById("intro").textContent = b.intro;
 
       // Step 1: every account, shuffled, with its balance shown
-      const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, [b.owner + "'s Capital", b.capital]];
+      const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, ["Common Stock", b.commonStock]];
       all.sort(() => Math.random() - 0.5);
       document.getElementById("balances").innerHTML =
         all.map(a => `<tr><td>${a[0]}</td><td class="num">${money(a[1])}</td></tr>`).join("");
@@ -162,11 +162,11 @@
       bs += row("head", "Liabilities");
       b.liabilities.forEach(l => bs += row("line", l[0], l[1], "Find it in the balances above."));
       bs += row("total", "Total liabilities", totalL, "Add up all the liabilities.");
-      bs += row("head", "Owner's Equity");
-      bs += row("line", b.owner + "'s Capital", b.capital, "What the owner put in. It's in the balances above.");
-      bs += row("line", "Net income (from the income statement)", ni, "Copy it from your income statement.");
-      bs += row("total", "Total owner's equity", totalE, "Capital + Net income.");
-      bs += row("total grand", "Total liabilities + equity", totalL + totalE, "Total liabilities + Total equity. Should match total assets!");
+      bs += row("head", "Shareholders' Equity");
+      bs += row("line", "Common Stock", b.commonStock, "What shareholders invested. It's in the balances above.");
+      bs += row("line", "Retained Earnings", ni, "Net income − dividends. No dividends were paid, so copy net income from your income statement.");
+      bs += row("total", "Total shareholders' equity", totalE, "Common stock + Retained earnings.");
+      bs += row("total grand", "Total liabilities + shareholders' equity", totalL + totalE, "Total liabilities + Total shareholders' equity. Should match total assets!");
       document.getElementById("bsBody").innerHTML = bs;
 
       ["isFeedback", "bsFeedback"].forEach(id => document.getElementById(id).textContent = "");
@@ -208,7 +208,7 @@
     document.getElementById("isCheck").onclick = () =>
       check("isBody", "isFeedback", "Yes, queen! 👑 Your income statement is perfect. Now carry that net income down to the balance sheet.");
     document.getElementById("bsCheck").onclick = () =>
-      check("bsBody", "bsFeedback", `It balances! 💖 Assets = Liabilities + Equity. ${biz.owner} would hire you as her accountant.`);
+      check("bsBody", "bsFeedback", `It balances! 💖 Assets = Liabilities + Shareholders' Equity. ${biz.owner} would hire you as her accountant.`);
     document.getElementById("isShow").onclick = () => show("isBody", "isFeedback");
     document.getElementById("bsShow").onclick = () => show("bsBody", "bsFeedback");
 
@@ -220,7 +220,7 @@
     // Sanity check while building: every business must balance.
     businesses.forEach(b => {
       const ni = sum(b.revenue) - sum(b.expenses);
-      if (sum(b.assets) !== sum(b.liabilities) + b.capital + ni) console.error(b.name + " does not balance");
+      if (sum(b.assets) !== sum(b.liabilities) + b.commonStock + ni) console.error(b.name + " does not balance");
     });
   </script>
 </body>

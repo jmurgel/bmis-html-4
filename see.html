@@ -28,7 +28,7 @@
       <p class="formula">
         <span class="asset">Assets</span> =
         <span class="liab">Liabilities</span> +
-        <span class="equity">Equity</span>
+        <span class="equity">Shareholders' Equity</span>
       </p>
       <div class="equation">
         <div class="stack" id="leftStack">
@@ -67,15 +67,15 @@
       "Equipment":           { type: "asset" },
       "Accounts Receivable": { type: "asset" },
       "Loan Payable":        { type: "liab" },
-      "Owner's Capital":     { type: "equity" },
+      "Common Stock":        { type: "equity" },
       "Revenue":             { type: "equity" },
       "Expenses":            { type: "equity" }
     };
 
     // Each transaction: a debit and a credit for the same amount.
     const transactions = [
-      { label: "1. Bella invests $5,000 of her savings", dr: "Cash", cr: "Owner's Capital", amt: 5000,
-        why: "Cash (an asset) goes up. The owner's claim (equity) goes up by the same amount." },
+      { label: "1. Bella buys $5,000 of stock in her bakery", dr: "Cash", cr: "Common Stock", amt: 5000,
+        why: "Cash (an asset) goes up. Common stock (shareholders' equity) goes up by the same amount." },
       { label: "2. Bella borrows $3,000 from the bank", dr: "Cash", cr: "Loan Payable", amt: 3000,
         why: "Cash goes up, and so does what you owe (a liability)." },
       { label: "3. Buy a $2,000 pink stand mixer and oven", dr: "Equipment", cr: "Cash", amt: 2000,
