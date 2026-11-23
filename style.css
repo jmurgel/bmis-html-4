@@ -1,16 +1,16 @@
 /* One stylesheet shared by every page */
 :root {
-  --bg: #fff0f6;
-  --card: #ffffff;
-  --ink: #3a1f2d;
-  --muted: #85566c;
-  --accent: #d63384;
+  --bg: #ffe4f1;
+  --card: #fff7fb;
+  --ink: #4a0d2e;
+  --muted: #a3416f;
+  --accent: #e6007a;
   --asset: #c2185b;
-  --liab: #e0662f;
-  --equity: #8e44ad;
-  --line: #f5c6dc;
-  --good: #1f8a4c;
-  --bad: #c0392b;
+  --liab: #ff4f9a;
+  --equity: #8f0f52;
+  --line: #ffb8d9;
+  --good: #e6007a;
+  --bad: #7a0a3c;
 }
 
 * { box-sizing: border-box; }
@@ -24,7 +24,7 @@ body {
 }
 
 header {
-  background: linear-gradient(135deg, #ff6fae, #d63384);
+  background: linear-gradient(135deg, #ff8cc6, #e6007a);
   color: #fff;
   padding: 20px 16px;
 }
@@ -35,7 +35,7 @@ nav {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  background: #b0256c;
+  background: #c2006a;
   padding: 8px 16px;
 }
 nav a {
@@ -162,8 +162,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24
 .stmt tr.total td { font-weight: 700; }
 .stmt tr.grand td { border-bottom: 3px double var(--ink); }
 .stmt input { width: 130px; text-align: right; }
-.stmt input.ok { border-color: var(--good); background: #e3f7ea; }
-.stmt input.no { border-color: var(--bad); background: #fde8e6; }
+.stmt input.ok { border: 2px solid var(--good); background: #ffc9e3; }
+.stmt input.no { border: 2px dashed var(--bad); background: #fff; }
 .flow {
   text-align: center;
   background: #ffe3f0;
@@ -178,7 +178,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24
 }
 
 /* Full equation page */
-:root { --rev: #23966a; --exp: #d9485f; --div: #c98a12; --re: #f05ca0; }
+:root { --rev: #d4006a; --exp: #a8285f; --div: #f0679f; --re: #ff85bd; }
 .rev { color: var(--rev); }
 .exp { color: var(--exp); }
 .div { color: var(--div); }
@@ -200,7 +200,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24
 .node.exp { color: var(--exp); }
 .node.div { color: var(--div); }
 .node:hover, .node.picked { background: currentColor; }
-.node.picked, .node:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.node.picked, .node:hover { box-shadow: 0 4px 12px rgba(230,0,122,.25); }
 .node.picked, .node:hover { -webkit-text-fill-color: #fff; }
 .op { font-size: 1.4rem; font-weight: 700; color: var(--muted); }
 .define {
