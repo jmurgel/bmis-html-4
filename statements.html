@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Jordan Murgel">
-  <title>Ledger Lab · Statements</title>
+  <title>Ledger Lab · The Pink Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Statements: build them yourself</h1>
-    <p>Use the account balances to fill out the income statement, the statement of retained earnings, then the balance sheet. 📊</p>
+    <h1>The Pink Ledger 🎀</h1>
+    <p>Close the books like a boss: income statement first, then the statement of retained earnings, then the balance sheet. Each one hands a number to the next. 💕</p>
   </header>
   <nav>
     <a href="index.html">Home</a>
     <a href="see.html">See</a>
     <a href="practice.html">Practice</a>
-    <a href="statements.html" class="active">Statements</a>
+    <a href="statements.html" class="active">Pink Ledger 🎀</a>
     <a href="story.html">Story</a>
     <a href="equation.html">Equation</a>
   </nav>
@@ -30,10 +30,10 @@
       <p id="intro"></p>
     </div>
 
-    <!-- Step 1: the account balances -->
-    <h2>Step 1 · The account balances</h2>
+    <!-- Reference: the account balances -->
+    <h2>📒 Your account balances</h2>
     <div class="card">
-      <p class="hint">These are every account's ending balance, in no particular order. Decide where each one belongs.
+      <p class="hint">Use this list for all three statements. These are every account's balance, in no particular order. Decide where each one belongs.
       Revenue and expenses go on the <strong>income statement</strong>. Beginning retained earnings and dividends go on the
       <strong>statement of retained earnings</strong>. Assets, liabilities and common stock go on the <strong>balance sheet</strong>.</p>
       <table>
@@ -42,8 +42,8 @@
       </table>
     </div>
 
-    <!-- Step 2: income statement -->
-    <h2>Step 2 · Income statement</h2>
+    <!-- Step 1: income statement -->
+    <h2>Step 1 · Income statement</h2>
     <div class="card">
       <p class="stmt-title" id="isTitle"></p>
       <table class="stmt"><tbody id="isBody"></tbody></table>
@@ -54,8 +54,8 @@
 
     <div class="flow">💖 Net income doesn't disappear. It flows into the <strong>statement of retained earnings</strong>.</div>
 
-    <!-- Step 3: statement of retained earnings -->
-    <h2>Step 3 · Statement of retained earnings</h2>
+    <!-- Step 2: statement of retained earnings -->
+    <h2>Step 2 · Statement of retained earnings</h2>
     <div class="card">
       <p class="stmt-title" id="reTitle"></p>
       <table class="stmt"><tbody id="reBody"></tbody></table>
@@ -66,8 +66,8 @@
 
     <div class="flow">💖 Ending retained earnings flows into <strong>shareholders' equity</strong> on the balance sheet.</div>
 
-    <!-- Step 4: balance sheet -->
-    <h2>Step 4 · Balance sheet</h2>
+    <!-- Step 3: balance sheet -->
+    <h2>Step 3 · Balance sheet</h2>
     <div class="card">
       <p class="stmt-title" id="bsTitle"></p>
       <table class="stmt"><tbody id="bsBody"></tbody></table>
@@ -158,14 +158,14 @@
       const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.commonStock + endRE;
       document.getElementById("intro").textContent = b.intro;
 
-      // Step 1: every account, shuffled, with its balance shown
+      // Reference list: every account, shuffled, with its balance shown
       const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, ["Common Stock", b.commonStock],
         ["Retained Earnings (start of the month)", b.beginningRE], ["Dividends", b.dividends]];
       all.sort(() => Math.random() - 0.5);
       document.getElementById("balances").innerHTML =
         all.map(a => `<tr><td>${a[0]}</td><td class="num">${money(a[1])}</td></tr>`).join("");
 
-      // Step 2: income statement
+      // Step 1: income statement
       document.getElementById("isTitle").innerHTML = `<strong>${b.name}</strong><br>Income Statement<br>${b.period}`;
       let is = row("head", "Revenues");
       b.revenue.forEach(r => is += row("line", r[0], r[1], "Find it in the balances above."));
@@ -176,15 +176,15 @@
       is += row("total grand", "Net income", ni, "Revenues − Expenses.");
       document.getElementById("isBody").innerHTML = is;
 
-      // Step 3: statement of retained earnings
+      // Step 2: statement of retained earnings
       document.getElementById("reTitle").innerHTML = `<strong>${b.name}</strong><br>Statement of Retained Earnings<br>${b.period}`;
-      let re = row("line", "Retained earnings, beginning", b.beginningRE, "Use the start-of-the-month retained earnings balance above.");
+      let re = row("line", "Retained earnings, beginning", b.beginningRE, "Use Retained Earnings (start of the month) from your account balances.");
       re += row("line", "Add: Net income", ni, "Copy net income from your income statement.");
       re += row("line", "Less: Dividends", b.dividends, "Find Dividends in the balances above. Enter it as a positive number.");
       re += row("total grand", "Retained earnings, ending", endRE, "Beginning + Net income − Dividends.");
       document.getElementById("reBody").innerHTML = re;
 
-      // Step 4: balance sheet
+      // Step 3: balance sheet
       document.getElementById("bsTitle").innerHTML = `<strong>${b.name}</strong><br>Balance Sheet<br>${b.date}`;
       let bs = row("head", "Assets");
       b.assets.forEach(a => bs += row("line", a[0], a[1], "Find it in the balances above."));
