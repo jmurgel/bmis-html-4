@@ -1,4 +1,4 @@
-# BMIS 235 · HTML-4 · Ledger Lab
+# BMIS 235 · HTML-4 · The Pink Ledger 🎀
 
 **Name:** Jordan Murgel
 **GU username:** jmurgel
@@ -10,14 +10,14 @@ A learning tool for the basics of financial accounting (Assets = Liabilities + E
 - `index.html`: home page with key terms and the five ways to learn
 - `see.html`: **See.** Run transactions and watch the equation bars and T-accounts update
 - `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
-- `statements.html`: **The Pink Ledger.** Fill out an income statement, statement of retained earnings and balance sheet for three practice businesses
+- `statements.html`: **Statements.** Fill out an income statement, statement of retained earnings and balance sheet for three practice businesses
 - `story.html`: **Story.** Maya & Zoe start a bracelet business and learn to keep their books
 - `equation.html`: **Equation.** A visual, interactive breakdown of Assets = Liabilities + Common Stock + Retained Earnings (Revenue − Expenses − Dividends)
 - `style.css`: one stylesheet shared by every page
 
 Plain HTML, CSS and JavaScript with no build step.
 
-# HTML-4: Ledger Lab
+# HTML-4: The Pink Ledger 🎀
 **By:** Jordan Murgel (jmurgel)
 **Live site:** https://bmis-html-4.jordanmurgel.workers.dev
 
