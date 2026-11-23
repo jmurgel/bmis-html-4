@@ -12,7 +12,7 @@ A learning tool for the basics of financial accounting (Assets = Liabilities + E
 - `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
 - `statements.html`: **Statements.** Fill out an income statement and balance sheet for three practice businesses
 - `story.html`: **Story.** Maya & Zoe start a bracelet business and learn to keep their books
-- `listen.html`: **Listen.** Builds a NotebookLM prompt for an audio explainer
+- `equation.html`: **Equation.** A visual, interactive breakdown of Assets = Liabilities + Common Stock + Retained Earnings (Revenue − Expenses − Dividends)
 - `style.css`: one stylesheet shared by every page
 
 Plain HTML, CSS and JavaScript with no build step.

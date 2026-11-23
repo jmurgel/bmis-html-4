@@ -176,3 +176,64 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24
   .stmt input { width: 100px; }
   .stmt tr.line td:first-child { padding-left: 12px; }
 }
+
+/* Full equation page */
+:root { --rev: #23966a; --exp: #d9485f; --div: #c98a12; --re: #f05ca0; }
+.rev { color: var(--rev); }
+.exp { color: var(--exp); }
+.div { color: var(--div); }
+.re  { color: var(--re); }
+.formula.long { font-size: 1.05rem; margin-top: 16px; }
+
+.tree { display: flex; flex-direction: column; align-items: center; }
+.tier { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; }
+.down { margin: 10px 0; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.node {
+  margin: 0; border: 2px solid currentColor; background: #fff;
+  border-radius: 14px; padding: 10px 14px;
+}
+.node.asset { color: var(--asset); }
+.node.liab { color: var(--liab); }
+.node.equity { color: var(--equity); }
+.node.re { color: var(--re); }
+.node.rev { color: var(--rev); }
+.node.exp { color: var(--exp); }
+.node.div { color: var(--div); }
+.node:hover, .node.picked { background: currentColor; }
+.node.picked, .node:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.node.picked, .node:hover { -webkit-text-fill-color: #fff; }
+.op { font-size: 1.4rem; font-weight: 700; color: var(--muted); }
+.define {
+  margin-top: 18px; background: #ffe3f0; border-radius: 14px; padding: 12px 16px; min-height: 3em;
+}
+
+.sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 20px; }
+.sliders label { font-weight: 600; }
+.sliders output { float: right; font-weight: 700; }
+.sliders input[type=range] { padding: 0; border: 0; accent-color: var(--accent); }
+
+.wrow { display: grid; grid-template-columns: 150px 1fr 80px; align-items: center; gap: 8px; margin: 6px 0; }
+.wlabel { font-weight: 600; font-size: .9rem; }
+.wamt { text-align: right; font-weight: 700; }
+.wtrack { position: relative; height: 26px; background: #fff5fa; border-radius: 6px; }
+.wbar { position: absolute; top: 0; bottom: 0; border-radius: 6px; transition: left .4s, width .4s; }
+.wbar.rev { background: var(--rev); }
+.wbar.exp { background: var(--exp); }
+.wbar.div { background: var(--div); }
+.wbar.re  { background: var(--re); }
+
+.bars .barlabel { font-weight: 600; font-size: .9rem; margin-top: 10px; }
+.hbar { display: flex; height: 44px; background: #fff5fa; border-radius: 10px; overflow: hidden; }
+.seg {
+  height: 100%; color: #fff; font-weight: 700; font-size: .85rem; white-space: nowrap; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; transition: width .5s ease;
+}
+.seg.asset { background: var(--asset); }
+.seg.liab { background: var(--liab); }
+.seg.equity { background: var(--equity); }
+.seg.re { background: var(--re); }
+
+@media (max-width: 520px) {
+  .wrow { grid-template-columns: 96px 1fr 64px; font-size: .85rem; }
+  .node { padding: 8px 10px; font-size: .9rem; }
+}
