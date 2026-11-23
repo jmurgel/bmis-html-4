@@ -19,7 +19,7 @@ Plain HTML, CSS and JavaScript with no build step.
 
 # HTML-4: Ledger Lab
 **By:** Jordan Murgel (jmurgel)
-**Live site:** https://dash.cloudflare.com/6fd9fcc8c08dc68aaf944fb7ee4164e3/workers/services/view/bmis-html-4/production/builds/b95e8e6c-8b59-432f-8f88-2dd10a978619
+**Live site:** https://bmis-html-4.jordanmurgel.workers.dev
 
 ## My path
 Path 2 · Full build, and why I picked it.
