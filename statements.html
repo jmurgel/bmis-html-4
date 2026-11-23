@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledger Lab · Statements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Statements: build them yourself</h1>
+    <p>Use the account balances to fill out the income statement first, then the balance sheet. 📊</p>
+  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="see.html">See</a>
+    <a href="practice.html">Practice</a>
+    <a href="statements.html" class="active">Statements</a>
+    <a href="story.html">Story</a>
+    <a href="listen.html">Listen</a>
+  </nav>
+
+  <main>
+    <div class="card">
+      <label for="pick"><strong>Choose a business</strong></label>
+      <select id="pick"></select>
+      <p id="intro"></p>
+    </div>
+
+    <!-- Step 1: the account balances -->
+    <h2>Step 1 · The account balances</h2>
+    <div class="card">
+      <p class="hint">These are every account's ending balance, in no particular order. Decide where each one belongs.
+      Revenue and expenses go on the <strong>income statement</strong>. Assets, liabilities and capital go on the
+      <strong>balance sheet</strong>.</p>
+      <table>
+        <thead><tr><th>Account</th><th class="num">Balance</th></tr></thead>
+        <tbody id="balances"></tbody>
+      </table>
+    </div>
+
+    <!-- Step 2: income statement -->
+    <h2>Step 2 · Income statement</h2>
+    <div class="card">
+      <p class="stmt-title" id="isTitle"></p>
+      <table class="stmt"><tbody id="isBody"></tbody></table>
+      <button id="isCheck">Check my income statement</button>
+      <button class="secondary" id="isShow">Show answers</button>
+      <p class="feedback" id="isFeedback"></p>
+    </div>
+
+    <div class="flow" id="flow">💖 Net income doesn't disappear. It flows into the <strong>equity</strong> section of the balance sheet.</div>
+
+    <!-- Step 3: balance sheet -->
+    <h2>Step 3 · Balance sheet</h2>
+    <div class="card">
+      <p class="stmt-title" id="bsTitle"></p>
+      <table class="stmt"><tbody id="bsBody"></tbody></table>
+      <button id="bsCheck">Check my balance sheet</button>
+      <button class="secondary" id="bsShow">Show answers</button>
+      <p class="feedback" id="bsFeedback"></p>
+    </div>
+
+    <div class="card">
+      <h3>Cheat sheet</h3>
+      <ul>
+        <li><strong>Income statement</strong> = a movie of one period. Revenue − Expenses = <strong>Net income</strong>.</li>
+        <li><strong>Balance sheet</strong> = a snapshot of one day. Assets = Liabilities + Equity.</li>
+        <li><strong>Equity</strong> on the balance sheet = owner's capital + net income (minus any withdrawals).</li>
+        <li>Order matters: do the income statement first, because the balance sheet needs its net income.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>BMIS 235 · Ledger Lab 💖 Made for future boss girls</footer>
+
+  <script>
+    // Each business: its accounts, grouped by where they go on the statements.
+    // Totals are calculated from these, so the answers always add up.
+    const businesses = [
+      {
+        name: "Lily's Candle Co. 🕯️",
+        owner: "Lily",
+        period: "Month ended March 31",
+        date: "March 31",
+        intro: "Lily pours soy candles and sells them online and at the farmers' market. Here's her first month.",
+        revenue:     [["Sales Revenue", 3800]],
+        expenses:    [["Wages Expense", 900], ["Rent Expense", 600], ["Advertising Expense", 200], ["Utilities Expense", 100]],
+        assets:      [["Cash", 5000], ["Accounts Receivable", 600], ["Supplies (wax and wicks)", 900], ["Equipment", 2500]],
+        liabilities: [["Accounts Payable", 700], ["Unearned Revenue", 300], ["Notes Payable", 2000]],
+        capital: 4000
+      },
+      {
+        name: "Sofia's Nail Studio 💅",
+        owner: "Sofia",
+        period: "Month ended April 30",
+        date: "April 30",
+        intro: "Sofia opened a nail studio downtown. Fill out her statements for April.",
+        revenue:     [["Service Revenue", 5200]],
+        expenses:    [["Wages Expense", 1800], ["Salon Rent Expense", 1200], ["Supplies Expense", 700], ["Insurance Expense", 100]],
+        assets:      [["Cash", 3100], ["Accounts Receivable", 400], ["Supplies (polish and gels)", 500], ["Equipment", 4000]],
+        liabilities: [["Accounts Payable", 600], ["Loan Payable", 2500]],
+        capital: 3500
+      },
+      {
+        name: "Ava's Boutique 👗",
+        owner: "Ava",
+        period: "Month ended May 31",
+        date: "May 31",
+        intro: "Ava runs a small clothing boutique. This one has two kinds of revenue. Watch out!",
+        revenue:     [["Sales Revenue", 7400], ["Styling Session Revenue", 600]],
+        expenses:    [["Cost of Goods Sold", 3500], ["Wages Expense", 1500], ["Rent Expense", 1100], ["Advertising Expense", 400]],
+        assets:      [["Cash", 4300], ["Inventory", 6200], ["Equipment", 1800]],
+        liabilities: [["Accounts Payable", 2100], ["Notes Payable", 3000]],
+        capital: 5700
+      }
+    ];
+
+    const money = n => "$" + n.toLocaleString();
+    const sum = list => list.reduce((s, x) => s + x[1], 0);
+    let biz;
+
+    // Build one statement row. type: "line" (an account), "total" (a calculated line), "head" (a section heading)
+    function row(type, label, answer, hint) {
+      if (type === "head") return `<tr class="head"><td colspan="2">${label}</td></tr>`;
+      return `<tr class="${type}"><td>${label}</td>
+        <td class="num"><input type="number" inputmode="numeric" data-answer="${answer}" data-hint="${hint || ""}" aria-label="${label}"></td></tr>`;
+    }
+
+    function load(i) {
+      biz = businesses[i];
+      const b = biz;
+      const totalRev = sum(b.revenue), totalExp = sum(b.expenses), ni = totalRev - totalExp;
+      const totalA = sum(b.assets), totalL = sum(b.liabilities), totalE = b.capital + ni;
+      document.getElementById("intro").textContent = b.intro;
+
+      // Step 1: every account, shuffled, with its balance shown
+      const all = [...b.revenue, ...b.expenses, ...b.assets, ...b.liabilities, [b.owner + "'s Capital", b.capital]];
+      all.sort(() => Math.random() - 0.5);
+      document.getElementById("balances").innerHTML =
+        all.map(a => `<tr><td>${a[0]}</td><td class="num">${money(a[1])}</td></tr>`).join("");
+
+      // Step 2: income statement
+      document.getElementById("isTitle").innerHTML = `<strong>${b.name}</strong><br>Income Statement<br>${b.period}`;
+      let is = row("head", "Revenues");
+      b.revenue.forEach(r => is += row("line", r[0], r[1], "Find it in the balances above."));
+      if (b.revenue.length > 1) is += row("total", "Total revenues", totalRev, "Add up all the revenue lines.");
+      is += row("head", "Expenses");
+      b.expenses.forEach(e => is += row("line", e[0], e[1], "Find it in the balances above."));
+      is += row("total", "Total expenses", totalExp, "Add up all the expense lines.");
+      is += row("total grand", "Net income", ni, "Revenues − Expenses.");
+      document.getElementById("isBody").innerHTML = is;
+
+      // Step 3: balance sheet
+      document.getElementById("bsTitle").innerHTML = `<strong>${b.name}</strong><br>Balance Sheet<br>${b.date}`;
+      let bs = row("head", "Assets");
+      b.assets.forEach(a => bs += row("line", a[0], a[1], "Find it in the balances above."));
+      bs += row("total grand", "Total assets", totalA, "Add up all the assets.");
+      bs += row("head", "Liabilities");
+      b.liabilities.forEach(l => bs += row("line", l[0], l[1], "Find it in the balances above."));
+      bs += row("total", "Total liabilities", totalL, "Add up all the liabilities.");
+      bs += row("head", "Owner's Equity");
+      bs += row("line", b.owner + "'s Capital", b.capital, "What the owner put in. It's in the balances above.");
+      bs += row("line", "Net income (from the income statement)", ni, "Copy it from your income statement.");
+      bs += row("total", "Total owner's equity", totalE, "Capital + Net income.");
+      bs += row("total grand", "Total liabilities + equity", totalL + totalE, "Total liabilities + Total equity. Should match total assets!");
+      document.getElementById("bsBody").innerHTML = bs;
+
+      ["isFeedback", "bsFeedback"].forEach(id => document.getElementById(id).textContent = "");
+    }
+
+    // Mark each input right or wrong and show a hint on the wrong ones.
+    function check(bodyId, feedbackId, doneMsg) {
+      const inputs = [...document.querySelectorAll(`#${bodyId} input`)];
+      let right = 0;
+      inputs.forEach(inp => {
+        const ok = inp.value !== "" && Number(inp.value) === Number(inp.dataset.answer);
+        inp.classList.toggle("ok", ok);
+        inp.classList.toggle("no", !ok);
+        inp.title = ok ? "" : inp.dataset.hint;
+        if (ok) right++;
+      });
+      const fb = document.getElementById(feedbackId);
+      if (right === inputs.length) {
+        fb.style.color = "var(--good)";
+        fb.textContent = doneMsg;
+      } else {
+        fb.style.color = "var(--bad)";
+        const firstWrong = inputs.find(i => i.classList.contains("no"));
+        fb.textContent = `${right} of ${inputs.length} correct. Hint for "${firstWrong.getAttribute("aria-label")}": ${firstWrong.dataset.hint}`;
+      }
+    }
+
+    function show(bodyId, feedbackId) {
+      document.querySelectorAll(`#${bodyId} input`).forEach(inp => {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove("no");
+        inp.classList.add("ok");
+      });
+      const fb = document.getElementById(feedbackId);
+      fb.style.color = "var(--muted)";
+      fb.textContent = "Here are the answers. Try another business to practice on your own!";
+    }
+
+    document.getElementById("isCheck").onclick = () =>
+      check("isBody", "isFeedback", "Yes, queen! 👑 Your income statement is perfect. Now carry that net income down to the balance sheet.");
+    document.getElementById("bsCheck").onclick = () =>
+      check("bsBody", "bsFeedback", `It balances! 💖 Assets = Liabilities + Equity. ${biz.owner} would hire you as her accountant.`);
+    document.getElementById("isShow").onclick = () => show("isBody", "isFeedback");
+    document.getElementById("bsShow").onclick = () => show("bsBody", "bsFeedback");
+
+    const pick = document.getElementById("pick");
+    pick.innerHTML = businesses.map((b, i) => `<option value="${i}">${b.name}</option>`).join("");
+    pick.onchange = () => load(pick.value);
+    load(0);
+
+    // Sanity check while building: every business must balance.
+    businesses.forEach(b => {
+      const ni = sum(b.revenue) - sum(b.expenses);
+      if (sum(b.assets) !== sum(b.liabilities) + b.capital + ni) console.error(b.name + " does not balance");
+    });
+  </script>
+</body>
+</html>
