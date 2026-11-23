@@ -9,10 +9,10 @@ A learning tool for the basics of financial accounting (Assets = Liabilities + E
 
 - `index.html`: home page with key terms and the five ways to learn
 - `see.html`: **See.** Run transactions and watch the equation bars and T-accounts update
-- `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
+- `equation.html`: **Equation.** A visual, interactive breakdown of Assets = Liabilities + Common Stock + Retained Earnings (Revenue − Expenses − Dividends)
 - `statements.html`: **Statements.** Fill out an income statement, statement of retained earnings and balance sheet for three practice businesses
 - `story.html`: **Story.** Maya & Zoe start a bracelet business and learn to keep their books
-- `equation.html`: **Equation.** A visual, interactive breakdown of Assets = Liabilities + Common Stock + Retained Earnings (Revenue − Expenses − Dividends)
+- `practice.html`: **Practice.** A quiz, a debit/credit sorter, and a "find the broken entry" game
 - `style.css`: one stylesheet shared by every page
 
 Plain HTML, CSS and JavaScript with no build step.
